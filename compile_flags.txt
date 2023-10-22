@@ -1,0 +1,6 @@
+-I/opt/homebrew/include/
+-I/usr/include/
+-I/usr/local/include/
+-I./src/
+-I./src/vendor/
+-std=c++20
