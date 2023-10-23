@@ -173,7 +173,6 @@ public:
   void OnRender(const Rect& view_range, float dots_per_um){
     float sizepxl = std::max(boundary.width, boundary.height) * dots_per_um;
     if(sizepxl <= 1.0){
-
     }else if(1.0 < sizepxl && sizepxl <= 2.0){
     }else if(2.0 < sizepxl && sizepxl <= 4.0){
     }else if(4.0 < sizepxl && sizepxl <= 8.0){

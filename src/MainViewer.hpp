@@ -2,6 +2,11 @@
 #include "Geometry.hpp"
 #include "Visual.hpp"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
+
 using namespace Visual;
 using namespace Geometry;
 
@@ -12,9 +17,15 @@ private:
   
   VsRectangle* rectangle;
   VsAREF* visual_aref; 
+
+  float left_um;
+  float top_um;
+  float width_um;
 public:
   MainViewer(){
-  
+    left_um = 0;
+    top_um = 0;
+    width_um = 1000.0f;
   }
   ~MainViewer(){
 
@@ -33,8 +44,8 @@ public:
                     ar.pShape->GetType());
       std::cout << str << std::endl;
     }
-    rectangle = new VsRectangle(Rect(0,0,50,50));
-    visual_aref = new VsAREF(Point(0,0), 3, 3, 100.0f, 100.0f, (VsObj*)rectangle);
+    rectangle = new VsRectangle(Rect(0,0,5,5));
+    visual_aref = new VsAREF(Point(0,0), 100, 100, 10.0f, 10.0f, (VsObj*)rectangle);
   }
   void BuildShapes()
   {
@@ -65,14 +76,29 @@ public:
     pShapes.push_back(std::make_tuple(rect, points));
   }
   void OnRender(int wnd_width, int wnd_height){
-    float left_um = 0;
-    float top_um = 0;
-    float width_um = 1000;
-    float height_um = width_um * wnd_height/wnd_width;
+    // Start the Dear ImGui frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::Begin("Test");
+
+    float height_um = width_um * (float)wnd_height / wnd_width;
     float dots_per_um;
     dots_per_um = wnd_height / width_um;
-    //rectangle->OnRender(Rect(left_um, top_um, width_um, height_um));
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Wnd: %d, %d", wnd_width, wnd_height);
+
     visual_aref->OnRender(Rect(left_um, top_um, width_um, height_um), dots_per_um);
+
+    ImGui::SliderFloat("Width[um]", &width_um, 10.0f, 10000.0f);
+    ImGui::SliderFloat("Left", &left_um, -400.0f, 400.0f);
+    ImGui::SliderFloat("Top", &top_um, -400.0f, 400.0f);
+
+
+    ImGui::End();
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   }
   static void Reorganize(std::vector<std::tuple<Shape*, std::vector<Point>>>& p_vshapes, std::vector<AREF>* p_arefs)
   {
