@@ -100,14 +100,14 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
   unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
 
   glAttachShader(program , vs);
+  glDeleteShader(vs);
   glAttachShader(program , fs);
+  glDeleteShader(fs);
+
   glBindAttribLocation(program, 0, "position");
-  glBindFragDataLocation(program, 0, "fragment");
+  glBindFragDataLocation(program, 0, "color");
   glLinkProgram(program);
   glValidateProgram(program);
-
-  glDeleteShader(vs);
-  glDeleteShader(fs);
 
   return program;
 }
