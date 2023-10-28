@@ -4,6 +4,7 @@
 #include "logGL.hpp"
 #include "GLFW/glfw3.h"
 
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image/stb_image.h"
 
@@ -20,11 +21,37 @@ void Renderer::Initial()
       0, 1, 3,   // 첫 번째 삼각형
       1, 2, 3    // 두 번째 삼각형
   };  
+  cubePositions = {
+    glm::vec3( 0.0f,  0.0f, 0.0f), 
+    glm::vec3( 2.0f,  5.0f, 0.0f), 
+    glm::vec3(-1.5f, -2.2f, 0.0f),  
+    glm::vec3(-3.8f, -2.0f, 0.0f),  
+    glm::vec3( 2.4f, -0.4f, 0.0f),  
+    glm::vec3(-1.7f,  3.0f, 0.0f),  
+    glm::vec3( 1.3f, -2.0f, 0.0f),  
+    glm::vec3( 1.5f,  2.0f, 0.0f), 
+    glm::vec3( 1.5f,  0.2f, 0.0f), 
+    glm::vec3(-1.3f,  1.0f, 0.0f)  
+  };
+  model = glm::mat4(1.0f);
+  view = glm::mat4(1.0f);
+  projection = glm::mat4(1.0f);
+  view       = glm::lookAt(
+      glm::vec3(0,0,1), // ワールド空間でカメラは(4,3,3)にあります。
+      glm::vec3(0,0,0), // 原点を見ています。
+      glm::vec3(0,1,0)  // 頭が上方向(0,-1,0にセットすると上下逆転します。)
+  );
+  projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -1.0f, 1.0f);
+  model = glm::translate(model, glm::vec3( 0.0f,  0.0f, 0.0f));
+
   m_Shader = std::make_unique<Shader>("res/shaders/Basic.shader");
   m_Shader->Bind();
   m_Shader->SetUniform4f("ourColor", 1.0f, 0.0f, 0.0f, 1.0f);
   m_Shader->SetUniform1i("texture1", 0);
   m_Shader->SetUniform1i("texture2", 1);
+  m_Shader->SetUniformMat4f("projection", projection);
+  m_Shader->SetUniformMat4f("view", view);
+  m_Shader->SetUniformMat4f("model", model);
 
   int width, height, nrChannels;
   unsigned char *data;
@@ -95,10 +122,18 @@ void Renderer::Render()
 
   glBindVertexArray(VAO); 
 
+  for(unsigned int i = 0; i < cubePositions.size(); i++)
+  {
+    model = glm::translate(glm::mat4(1.0f), cubePositions[i]);
+    float angle = 20.0f * i; 
+    //model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+    //m_Shader->SetUniformMat4f("model", model);
+
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  }
   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glBindVertexArray(0);
 }
 void Renderer::Terminate()
