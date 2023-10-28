@@ -20,6 +20,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 
 #include "Renderer.hpp"
+#include "logGL.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {

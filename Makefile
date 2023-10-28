@@ -12,7 +12,7 @@ CXXFLAGS := $(CFLAGS) -std=c++20
 SRCDIR := ./src
 OBJDIR := ./obj
 BINDIR := ./bin
-INCLUDE := -I/opt/homebrew/include/ -I/usr/include/ -I/usr/local/include/ -I./src/ -I./src/imgui/
+INCLUDE := -I/opt/homebrew/include/ -I/usr/include/ -I/usr/local/include/ -I./src/ -I./src/vendors/
 LIBS := -lm
 DEFINES := 
 TARGET := ./bin/App
@@ -21,8 +21,9 @@ OPENGLLIB := -L/opt/homebrew/Cellar/glew/2.2.0_1/lib -L/opt/homebrew/Cellar/glfw
 LDFLAGS     := -L/usr/lib -L/usr/local/lib $(OPENGLLIB) -lGLEW.2.2 -lglfw.3.3
 
 SRC := Main.cpp
-SRC := $(SRC) imgui/imgui.cpp imgui/imgui_demo.cpp imgui/imgui_draw.cpp imgui/imgui_impl_glfw.cpp imgui/imgui_tables.cpp imgui/imgui_widgets.cpp imgui/imgui_impl_opengl3.cpp
-SRC := $(SRC) Renderer.cpp Shader.cpp
+SRC := $(SRC) vendors/imgui/imgui.cpp vendors/imgui/imgui_demo.cpp vendors/imgui/imgui_draw.cpp vendors/imgui/imgui_impl_glfw.cpp 
+SRC := $(SRC) vendors/imgui/imgui_tables.cpp vendors/imgui/imgui_widgets.cpp vendors/imgui/imgui_impl_opengl3.cpp
+SRC := $(SRC) Renderer.cpp Shader.cpp logGL.cpp
 
 OBJS  := $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
 DEPS  := $(addprefix $(OBJDIR)/, $(SRC:.cpp=.d))
