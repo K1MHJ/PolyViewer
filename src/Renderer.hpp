@@ -9,7 +9,7 @@ class Renderer
   unsigned int VBO;
   unsigned int VAO;
   unsigned int EBO;
-  unsigned int texture;
+  unsigned int texture[2];
 
 public:
   void Initial();

@@ -23,24 +23,34 @@ void Renderer::Initial()
   m_Shader = std::make_unique<Shader>("res/shaders/Basic.shader");
   m_Shader->Bind();
   m_Shader->SetUniform4f("ourColor", 1.0f, 0.0f, 0.0f, 1.0f);
+  m_Shader->SetUniform1i("texture1", 0);
+  m_Shader->SetUniform1i("texture2", 1);
 
   int width, height, nrChannels;
-  unsigned char *data = stbi_load("./res/textures/dirt.png", &width, &height, &nrChannels, 0); 
-
-  glGenTextures(1, &texture);  
-  glBindTexture(GL_TEXTURE_2D, texture);  
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  if(data){
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-  }else{
-      std::cout << "Failed to load texture" << std::endl;
+  unsigned char *data;
+  for(int i = 0;i<2;i++){
+    if(i == 0){
+      data = stbi_load("./res/textures/dirt.png", &width, &height, &nrChannels, 0); 
+    }
+    if(i == 1){
+      stbi_set_flip_vertically_on_load(true); 
+      data = stbi_load("./res/textures/tile2.jpg", &width, &height, &nrChannels, 0); 
+    }
+    glGenTextures(1, &texture[i]);  
+    glBindTexture(GL_TEXTURE_2D, texture[i]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    if(data){
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+      glGenerateMipmap(GL_TEXTURE_2D);
+    }else{
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
   }
-  stbi_image_free(data);
-
 
 
   glGenBuffers(1, &EBO);
@@ -75,15 +85,17 @@ void Renderer::Render()
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture[0]);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, texture[1]);
 
   m_Shader->Bind();
   m_Shader->SetUniform4f("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
 
   glBindVertexArray(VAO); 
 
-  glBindTexture(GL_TEXTURE_2D, texture);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+  //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -93,5 +105,6 @@ void Renderer::Terminate()
 {
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
+  glDeleteBuffers(1, &EBO);
 }
 
