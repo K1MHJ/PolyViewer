@@ -1,19 +1,8 @@
 #pragma once
 
-#define GLFW_NO_GLU
-#define GLFW_INCLUDE_GL3
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <OpenGL/glext.h>
-#include <OpenGL/gl3ext.h>
-#include <stb_image/stb_image.h>
-
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-
 #include <iostream>
-#include "Shader.hpp"
 #include "logGL.hpp"
+#include "Shader.hpp"
 
 bool RenderToTexture()
 {

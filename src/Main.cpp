@@ -1,12 +1,3 @@
-#define GLFW_NO_GLU
-#define GLFW_INCLUDE_GL3
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <OpenGL/glext.h>
-#include <OpenGL/gl3ext.h>
-
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -15,17 +6,22 @@
 #include <mach/mach.h>
 #include <signal.h>
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
+#include "logGL.hpp"
 
 #include "Renderer.hpp"
-#include "logGL.hpp"
-#include "RenderToTexture.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
+  float aspect = (float)width / (float)height;
   glViewport(0, 0, width, height);
+  // glEnable(GL_TEXTURE_2D);
+  // glEnable(GL_BLEND); //Enable alpha blending
+  // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  // glClearColor(0.0, 0.0, 0.0, 1.0);
+  // glMatrixMode(GL_PROJECTION);
+  // glLoadIdentity();
+  // gluOrtho2D(0.0, width, height * aspect, 0.0);
+  // glMatrixMode(GL_MODELVIEW);
 }
 
 void processInput(GLFWwindow *window)
@@ -76,13 +72,10 @@ int main(void)
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  // Renderer render;
-  // render.RenderToTexture();
-  // render.DrawTexture();
+  int width, height;
 
-  //render.Initial();
-  
-  RenderToTexture();
+  Renderer render;
+  render.Initial();
 
   glfwSwapBuffers(window);
   /* Loop until the user closes the window */
@@ -91,13 +84,11 @@ int main(void)
     /* Input */
     processInput(window);
 
-    // glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    // glClear(GL_COLOR_BUFFER_BIT);
-
+    glfwGetWindowSize(window, &width, &height);
     /* Render here */
-    //render.Render();
-    //glfwSwapBuffers(window);
-    
+    render.Render(width, height);
+
+    glfwSwapBuffers(window);
     /* Poll for and process events */
     glfwPollEvents();
   }
