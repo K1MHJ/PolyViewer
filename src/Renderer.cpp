@@ -3,6 +3,7 @@
 #include "Shader.hpp"
 #include "logGL.hpp"
 #include "PVRectangle.hpp"
+#include "PVAref.hpp"
 
 float um_per_pxl;
 float view_width_um;
@@ -11,6 +12,7 @@ float view_ofsX_um;
 float view_ofsY_um;
 
 std::unique_ptr<PV::PVRectangle> rect;
+std::unique_ptr<PV::PVAref> aref;
 void Renderer::Initial()
 {
   um_per_pxl = 1.0f;
@@ -18,6 +20,7 @@ void Renderer::Initial()
   view_ofsY_um = 0.0f;
   
   rect = std::make_unique<PV::PVRectangle>(50.0f, 50.0f, 50.0f, 100.0f);
+  aref = std::make_unique<PV::PVAref>();
 }
 void Renderer::Render(int width, int height)
 {
@@ -34,7 +37,9 @@ void Renderer::Render(int width, int height)
                           view_ofsY_um + view_height_um);
   glm::mat4 view(1.0f);
   glm::mat4 projView = projection * view;
-  rect->Render(view_ofsX_um, view_ofsY_um, view_width_um, view_height_um, projView);
+  //rect->Render(view_ofsX_um, view_ofsY_um, view_width_um, view_height_um, projView);
+  aref->Render(view_ofsX_um, view_ofsY_um, view_width_um, view_height_um, projView);
+
 }
 void Renderer::Terminate()
 {
