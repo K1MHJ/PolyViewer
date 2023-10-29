@@ -21,6 +21,7 @@
 
 #include "Renderer.hpp"
 #include "logGL.hpp"
+#include "RenderToTexture.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -74,24 +75,33 @@ int main(void)
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  Renderer render;
-  render.Initial();
 
+  // Renderer render;
+  // render.RenderToTexture();
+  // render.DrawTexture();
+
+  //render.Initial();
+  
+  RenderToTexture();
+
+  glfwSwapBuffers(window);
   /* Loop until the user closes the window */
   while (!glfwWindowShouldClose(window))
   {
     /* Input */
     processInput(window);
 
-    /* Render here */
-    render.Render();
+    // glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    // glClear(GL_COLOR_BUFFER_BIT);
 
-    /* Swap front and back buffers */
-    glfwSwapBuffers(window);
+    /* Render here */
+    //render.Render();
+    //glfwSwapBuffers(window);
+    
     /* Poll for and process events */
     glfwPollEvents();
   }
-  render.Terminate();
+  // render.Terminate();
   glfwDestroyWindow(window);
   glfwTerminate();
   return 0;
