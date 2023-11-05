@@ -1,7 +1,6 @@
 #include "logGL.hpp"
 #include "Shader.hpp"
 #include <GL/glew.h>
-#include "Renderer.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>

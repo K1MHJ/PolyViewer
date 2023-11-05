@@ -1,0 +1,38 @@
+{
+    "env": {
+        "myDefaultIncludePath": [
+            "${workspaceFolder}"
+        ],
+        "myCompilerPath": "/usr/bin/clang"
+    },
+    "configurations": [
+        {
+            "name": "Mac",
+            "intelliSenseMode": "clang-x64",
+            "includePath": [
+                "/opt/homebrew/include/",
+                "${workspaceFolder}/src/vendors/",
+                "${workspaceFolder}/src/vendors/imgui/",
+                "${workspaceFolder}/src/vendors/stb_image/",
+                "${workspaceFolder}/src/",
+                "${workspaceFolder}/"
+            ],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks"
+            ],
+            "defines": [],
+            "forcedInclude": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++20",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        }
+    ],
+    "version": 4
+}
